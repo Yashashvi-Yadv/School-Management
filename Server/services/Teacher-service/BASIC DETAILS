@@ -1,0 +1,6 @@
+{
+        headers: {
+          Authorization: `Bearer ${token}`, // 👈 matches your middleware
+        },
+
+        HEADER TOKEN 
