@@ -15,38 +15,39 @@ export const add = async (req, res) => {
         success: false,
         message: "Student with same email and roll number already exists",
       });
+    } else {
+      const student = await studentmodel.create({
+        name,
+        email,
+        rollNo,
+        contact,
+        section,
+        className,
+        teacher: id,
+      });
+
+      // Produce event to Kafka (link student to teacher)
+      await producer.send({
+        topic: "teacher-event",
+        messages: [
+          {
+            value: JSON.stringify({
+              type: "student added",
+              payload: student._id, // Just ID if teacher schema has ObjectId[]
+              id: id, // The teacher who owns this student
+            }),
+          },
+        ],
+      });
+
+      res.json({
+        success: true,
+        message: "Student saved successfully",
+        data: student,
+      });
     }
 
     // Create new student
-    const student = await studentmodel.create({
-      name,
-      email,
-      rollNo,
-      contact,
-      section,
-      className,
-      teacher: id,
-    });
-
-    // Produce event to Kafka (link student to teacher)
-    await producer.send({
-      topic: "teacher-event",
-      messages: [
-        {
-          value: JSON.stringify({
-            type: "student added",
-            payload: student._id, // Just ID if teacher schema has ObjectId[]
-            id: id, // The teacher who owns this student
-          }),
-        },
-      ],
-    });
-
-    res.json({
-      success: true,
-      message: "Student saved successfully",
-      data: student,
-    });
   } catch (error) {
     console.error("Error adding student:", error);
     res.status(500).json({
@@ -145,6 +146,7 @@ export const get = async (req, res) => {
   try {
     const { id } = req.user;
     const { rollNo } = req.body;
+    console.log(req.body);
     const user = await studentmodel.findOne({ teacher: id, rollNo: rollNo });
     if (!user) {
       return res.json({
@@ -175,7 +177,6 @@ export const getforattendence = async (req, res) => {
         message: "user not foud",
       });
     }
-    console.log(user);
 
     res.json({
       message: "user found",

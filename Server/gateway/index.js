@@ -43,6 +43,14 @@ app.use(
     pathRewrite: { "^/api/teacher/student": "/api/teacher/student" },
   })
 );
+app.use(
+  "/api/teacher/attendence",
+  createProxyMiddleware({
+    target: process.env.AUTH_SERVICE || "http://localhost:9002",
+    changeOrigin: true,
+    pathRewrite: { "^/api/teacher/attendence": "/api/teacher/attendence" },
+  })
+);
 
 app.listen(5000, () => {
   console.log("api gateway is running fine");
