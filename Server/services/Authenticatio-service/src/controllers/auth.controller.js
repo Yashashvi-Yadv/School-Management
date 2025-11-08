@@ -149,11 +149,3 @@ export const teacherlogin = async (req, res) => {
     });
   }
 };
-
-// ================= Student Login (to be implemented) ==================
-export const studentlogin = async (req, res) => {
-  res.json({
-    success: false,
-    message: "Student login not implemented yet",
-  });
-};

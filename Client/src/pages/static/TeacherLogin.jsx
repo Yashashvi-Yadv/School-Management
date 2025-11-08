@@ -45,7 +45,7 @@ export default function TeacherLogin() {
     setLoading(true);
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_AUTHENTICATION_ROUTE}teacher/login`,
+        `${import.meta.env.VITE_AUTHENTICATION_ROUTE}/teacher/login`,
         { id: form.id.trim(), password: form.password },
         { withCredentials: true } // ✅ required for cookies
       );

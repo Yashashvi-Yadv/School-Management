@@ -7,38 +7,26 @@ import {
   ClipboardList,
   BarChart,
   LogOut,
+  NotebookTabs,
 } from "lucide-react";
 
-export default function PrincipalDashboard() {
+export default function TeacherDashboard() {
   const [open, setOpen] = useState(true);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("student"));
 
   const menuItems = [
-    {
-      name: "Dashboard",
-      icon: <Home size={20} />,
-      link: "/principaldashboard",
-    },
-    {
-      name: "Teachers",
-      icon: <Users size={20} />,
-      link: "/principal/teachers",
-    },
-    {
-      name: "Students",
-      icon: <BookOpen size={20} />,
-      link: "/principal/students",
-    },
+    { name: "Dashboard", icon: <Home size={20} />, link: "/studentdash" },
     {
       name: "Attendance",
       icon: <ClipboardList size={20} />,
-      link: "/principal/attendance",
+      link: "/student/attendance",
     },
     {
-      name: "Reports",
-      icon: <BarChart size={20} />,
-      link: "/principal/reports",
+      name: "Gradebook",
+      icon: <NotebookTabs size={20} />,
+      link: "/student/grade/view",
     },
+    { name: "Reports", icon: <BarChart size={20} />, link: "/teacher/reports" },
   ];
 
   return (
@@ -50,7 +38,7 @@ export default function PrincipalDashboard() {
         } bg-blue-700 text-white transition-all duration-300 p-4`}
       >
         <h1 className="text-2xl font-bold mb-8">
-          {open ? user?.name + " Principal" : "P"}
+          {open ? user?.name + " Student " : "S"}
         </h1>
         <ul className="space-y-4">
           {menuItems.map((item, index) => (
@@ -100,19 +88,15 @@ export default function PrincipalDashboard() {
               alt="profile"
               className="w-10 h-10 rounded-full"
             />
-            <span className="font-semibold">Principal</span>
+            <span className="font-semibold">Teacher</span>
           </div>
         </div>
 
         {/* Dashboard Content */}
         <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-white shadow rounded-xl p-6">
-            <h2 className="text-gray-500">Total Teachers</h2>
+            <h2 className="text-gray-500">Total Student</h2>
             <p className="text-2xl font-bold text-blue-700">25</p>
-          </div>
-          <div className="bg-white shadow rounded-xl p-6">
-            <h2 className="text-gray-500">Total Students</h2>
-            <p className="text-2xl font-bold text-blue-700">560</p>
           </div>
           <div className="bg-white shadow rounded-xl p-6">
             <h2 className="text-gray-500">Classes</h2>

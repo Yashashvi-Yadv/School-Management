@@ -7,6 +7,9 @@ import {
   ClipboardList,
   BarChart,
   LogOut,
+  MarsStroke,
+  NotebookTabs,
+  BellDotIcon,
 } from "lucide-react";
 
 export default function TeacherDashboard() {
@@ -24,6 +27,16 @@ export default function TeacherDashboard() {
       name: "Attendance",
       icon: <ClipboardList size={20} />,
       link: "/teacher/attendance",
+    },
+    {
+      name: "Gradebook",
+      icon: <NotebookTabs size={20} />,
+      link: "/teacher/grade",
+    },
+    {
+      name: "Notification",
+      icon: <BellDotIcon size={20} />,
+      link: "/teacher/notification",
     },
     { name: "Reports", icon: <BarChart size={20} />, link: "/teacher/reports" },
   ];

@@ -17,5 +17,7 @@ export async function initkafka() {
     console.log("start the server of kafka");
   }
 }
-initkafka();
-listener();
+(async function () {
+  await initkafka();
+  await listener();
+})();

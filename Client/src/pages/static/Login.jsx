@@ -9,11 +9,14 @@ export default function Login() {
       const token = credentialResponse.credential;
 
       // Send Google token to backend
-      const res = await axios.post(`${import.meta.env.VITE_AUTHENTICATION_ROUTE}login`, { token });
+      const res = await axios.post(
+        `${import.meta.env.VITE_AUTHENTICATION_ROUTE}/login`,
+        { token }
+      );
 
       if (res.data.success) {
         const { jwt, user, role } = res.data;
-        console.log("user", user)
+        console.log("user", user);
 
         // Store auth details
         localStorage.setItem("authToken", jwt);

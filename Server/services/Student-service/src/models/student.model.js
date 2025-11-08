@@ -18,6 +18,10 @@ const studentschema = new mongoose.Schema({
   rollNo: {
     type: Number,
   },
+  password: {
+    type: Number,
+    default: 123456,
+  },
   section: {
     type: String,
   },

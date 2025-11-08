@@ -1,57 +1,53 @@
-import express from "express";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import gateway from "fast-gateway";
 import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
+
 dotenv.config();
-const app = express();
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:5173",
-  })
-);
-app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-  res.json({
-    message: "welcome to the api gateway",
-  });
+const server = gateway({
+  middlewares: [
+    cors({ origin: ["http://localhost:5173"], credentials: true }),
+    morgan("dev"),
+    (req, res, next) => {
+      console.log("Incoming:", req.method, req.originalUrl);
+      next();
+    },
+  ],
+  routes: [
+    {
+      prefix: "/api/auth",
+      target: process.env.AUTH_SERVICE || "http://localhost:8001",
+      stripPrefix: false,
+    },
+    {
+      prefix: "/api/teachers",
+      target: process.env.TEACHER_SERVICE || "http://localhost:8002",
+      stripPrefix: false,
+    },
+    {
+      prefix: "/api/teacher/student",
+      target: process.env.STUDENT_SERVICE || "http://localhost:9001",
+      stripPrefix: false,
+    },
+    {
+      prefix: "/api/teacher/attendence",
+      target: process.env.ATTENDANCE_SERVICE || "http://localhost:9002",
+      stripPrefix: false,
+    },
+    {
+      prefix: "/api/grade",
+      target: process.env.GRADE_SERVICE || "http://localhost:9003",
+      stripPrefix: false,
+    },
+    {
+      prefix: "/api/notification",
+      target: process.env.NOTIFICATION_SERVICE || "http://localhost:9004",
+      stripPrefix: false,
+    },
+  ],
 });
-app.use(
-  "/api/auth",
-  createProxyMiddleware({
-    target: process.env.AUTH_SERVICE || "http://localhost:8001",
-    changeOrigin: true,
-    pathRewrite: { "^/api/auth": "/api/auth" },
-  })
-);
-app.use(
-  "/api/teachers",
-  createProxyMiddleware({
-    target: process.env.AUTH_SERVICE || "http://localhost:8002",
-    changeOrigin: true,
-    pathRewrite: { "^/api/teachers": "/api/teachers" },
-  })
-);
 
-app.use(
-  "/api/teacher/student",
-  createProxyMiddleware({
-    target: process.env.AUTH_SERVICE || "http://localhost:9001",
-    changeOrigin: true,
-    pathRewrite: { "^/api/teacher/student": "/api/teacher/student" },
-  })
-);
-app.use(
-  "/api/teacher/attendence",
-  createProxyMiddleware({
-    target: process.env.AUTH_SERVICE || "http://localhost:9002",
-    changeOrigin: true,
-    pathRewrite: { "^/api/teacher/attendence": "/api/teacher/attendence" },
-  })
-);
-
-app.listen(5000, () => {
-  console.log("api gateway is running fine");
+server.start(5000).then(() => {
+  console.log("✅ API Gateway running on port 5000");
 });

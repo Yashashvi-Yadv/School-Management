@@ -13,4 +13,5 @@ export async function initkafka() {
   await consumer.connect();
   console.log("kafka is connected");
 }
+
 initkafka();

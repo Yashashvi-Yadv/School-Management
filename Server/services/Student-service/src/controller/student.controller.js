@@ -83,7 +83,6 @@ export const update = async (req, res) => {
       message: "internal server error",
     });
   }
-  console.log("helo from add function");
 };
 
 //<================= Delete Student ====================>
@@ -146,7 +145,7 @@ export const get = async (req, res) => {
   try {
     const { id } = req.user;
     const { rollNo } = req.body;
-    console.log(req.body);
+
     const user = await studentmodel.findOne({ teacher: id, rollNo: rollNo });
     if (!user) {
       return res.json({
@@ -190,5 +189,71 @@ export const getforattendence = async (req, res) => {
     });
   }
 };
+export const attendanceforadmin = async (req, res) => {
+  try {
+    const { rollNo, className, section } = req.body;
 
-export default { add, update, remove, get, getforattendence };
+    if (!rollNo || !className || !section) {
+      return res.json({
+        message: "please provide all the fields",
+        success: false,
+      });
+    }
+    const user = await studentmodel.findOne({
+      rollNo: Number(rollNo),
+      className: className,
+      section: section,
+    });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "student not found",
+      });
+    }
+    res.json({
+      success: true,
+      message: "student found",
+      student: user,
+    });
+  } catch (error) {
+    res.json({
+      message: "internal server error",
+      success: false,
+    });
+  }
+};
+
+export const getforgrade = async (req, res) => {
+  try {
+    console.log(req.user, req.body);
+    const { id } = req.user;
+    const { rollNo } = req.body;
+
+    const user = await studentmodel.findOne({ _id: id, rollNo: rollNo });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "student not found",
+      });
+    }
+    res.json({
+      success: true,
+      message: "student found",
+      student: user,
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+export default {
+  add,
+  update,
+  remove,
+  get,
+  getforattendence,
+
+  attendanceforadmin,
+};

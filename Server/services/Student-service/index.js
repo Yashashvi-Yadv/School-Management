@@ -1,13 +1,16 @@
 import express from "express";
 const app = express();
+import { connectDB } from "db-connect-yash";
 import { config } from "dotenv";
 import cors from "cors";
 import studentroute from "./src/routes/route.js";
 config();
-import db from "./src/config/connnect.js";
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-db();
+connectDB({
+  type: "mongo",
+  uri: "mongodb://localhost:27017/school_management",
+});
 app.use(
   cors({
     origin: ["http://localhost:5173", "http://localhost:5000"],
@@ -18,11 +21,7 @@ app.use(
 app.get("/", (req, res) => {
   res.send("hello from the student api");
 });
-app.use(
-  "/api/teacher/student/",
-
-  studentroute
-);
+app.use(studentroute);
 app.listen(9001, () => {
   console.log("teacher-student api is working fine");
 });

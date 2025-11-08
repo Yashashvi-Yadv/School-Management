@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
   res.send("hello from admin api");
 });
 
-app.use("/api/teachers/", teacherroute);
+app.use(teacherroute);
 
 app.listen(8002, () => {
   console.log("admin teacher service is running");
