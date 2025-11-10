@@ -123,7 +123,7 @@ Use the provided PowerShell script to start all services:
 - `/api/auth` → Authentication service
 - `/api/student` → Student service
 - `/api/teacher` → Teacher service
-- `/api/attendance` → Attendance service
+- `/api/attendance` → Attendance service used for attendence
 
 ### Authentication Service
 
